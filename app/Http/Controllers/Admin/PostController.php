@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -21,17 +21,9 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-		$this->validation();
-		
-		$post = Post::create($request->all());
-		$this->setPost($request, $post);
+		$this->setPostData($request, new Post)->save();
 		
 		return redirect()->route('posts.index');
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id)
@@ -41,11 +33,7 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-		$this->validation();
-		
-		$post = Post::findOrFail($id);
-		$post->fill($request->all());
-		$this->setPost($request, $post);
+		$this->setPostData($request, Post::findOrFail($id))->save();
 		
 		return redirect()->route('posts.index');
     }
@@ -57,27 +45,35 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 	
-	public function setPost(Request $request, $post)
+	public function setPostData(Request $request, $post, $validation = true)
 	{
+		if ($validation) $this->validation($request);
+		$post->fill($request->all());
 		$post->setDate($request->get('date'));
 		$post->setCategory($request->get('category_id'));
+		$post->save();
 		$post->setTags($request->get('tags'));
-		$post->uploadImage($request->get('image'));
+		$post->uploadImage($request->file('image'));
+		$post->toggleFeatured($request->get('is_featured'));
+		$post->toggleStatus($request->get('status'));
+		// dd($request->get('is_featured'), $request->get('status'), $post);
+		return $post;
 	}
 	
 	
-	public function validation()
+	public function validation(Request $request)
 	{
-		if (request()->get('category_id') == 0) {
-			request()->merge(['category_id' => null]);
+		if ($request->get('category_id') == 0) {
+			$request->merge(['category_id' => null]);
 		}
 		
-		request()->validate([
+		$request->validate([
 			'title' => 'required',
+			'content' => 'required',
 			'category_id' => 'nullable|integer|exists:categories,id',
 			'tags.*' => 'integer',
 			'tags' => 'nullable|array|exists:tags,id',
-			'date' => 'nullable|date_format:m/d/Y',
+			'date' => 'required|date_format:d/m/y',
 			'image' => 'nullable|image',
 		]);
 	}

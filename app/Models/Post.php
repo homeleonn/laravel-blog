@@ -87,7 +87,6 @@ class Post extends Model
     public function edit($fields)
     {
         $this->fill($fields);
-        $this->save();
     }
     
     public function remove()
@@ -108,15 +107,10 @@ class Post extends Model
 	public function setDate($date)
 	{
 		$date = $date ? 
-				\DateTime::createFromFormat('m/d/Y', $date)->format('Y-m-d'):
+				\DateTime::createFromFormat('d/m/y', $date)->format('Y-m-d'):
 				date('Y-m-d', time());
 		$this->created_at = $date;
 		$this->updated_at = $date;
-	}
-	
-	public function getDate()
-	{
-		return \DateTime::createFromFormat('Y-m-d', $this->created_at)->format('m/d/Y');
 	}
     
 	
@@ -127,7 +121,6 @@ class Post extends Model
 		}
 		
 		$this->category_id = $id;
-		$this->save();
     }
 	
 	public function setTags($ids)
@@ -142,30 +135,26 @@ class Post extends Model
 	public function setDraft()
 	{
 		$this->status = self::IS_DRAFT;
-		$this->save();
 	}
 	
 	public function setPublic()
 	{
 		$this->status = self::IS_PUBLIC;
-		$this->save();
 	}
 	
 	public function toggleStatus($value = null)
 	{
-		return $value ? $this->setDraft() : $this->setPublic();
+		return $value ? $this->setPublic() : $this->setDraft();
 	}
 	
 	public function setFeatured()
 	{
-		$this->status = self::IS_FEATURED;
-		$this->save();
+		$this->is_featured = self::IS_FEATURED;
 	}
 	
 	public function setStandard()
 	{
-		$this->status = self::IS_STANDARD;
-		$this->save();
+		$this->is_featured = self::IS_STANDARD;
 	}
 	
 	public function toggleFeatured($value = null)
@@ -173,12 +162,12 @@ class Post extends Model
 		return $value ? $this->setFeatured() : $this->setStandard();
 	}
 	
-	public function getCategory()
+	public function getCategoryTitle()
 	{
 		return $this->category->title ?? 'Нет категории';
 	}
 	
-	public function getTags()
+	public function getTagsTitles()
 	{
 		return $this->tags->count() ? $this->tags->implode('title', ', ') : 'Нет тегов';
 	}

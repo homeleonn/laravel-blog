@@ -28,9 +28,9 @@
             </div>
             
             <div class="form-group">
-              <img src="" alt="" class="img-responsive" width="200">
+              <img src="{{ $post->getImage() }}" alt="" class="img-responsive" width="200">
               <label for="exampleInputFile">Лицевая картинка</label>
-              <input type="file" id="exampleInputFile">
+              <input type="file" id="exampleInputFile" name="image">
 
               <p class="help-block">Какое-нибудь уведомление о форматах..</p>
             </div>
@@ -59,7 +59,7 @@
                 <div class="input-group-addon">
                   <i class="fa fa-calendar"></i>
                 </div>
-                <input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{ $post->created_at->format('m/d/Y') }}">
+                <input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{ $post->created_at->format('d/m/y') }}">
               </div>
               <!-- /.input group -->
             </div>
@@ -67,18 +67,14 @@
             <!-- checkbox -->
             <div class="form-group">
               <label>
-                <input type="checkbox" class="minimal" checked>
-              </label>
-              <label>
+                <input id="featured" type="checkbox" class="minimal" name="is_featured" {{$post->is_featured ? 'checked' : ''}}>
                 Рекомендовать
               </label>
             </div>
             <!-- checkbox -->
             <div class="form-group">
               <label>
-                <input type="checkbox" class="minimal">
-              </label>
-              <label>
+                <input id="status" type="checkbox" class="minimal" name="status" {{$post->status ? 'checked' : ''}}>
                 Черновик
               </label>
             </div>

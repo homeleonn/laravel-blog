@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\TagController;
@@ -24,10 +25,7 @@ use App\Http\Controllers\TestController;
 // dd($errors);
 // dd($app, $errors, $__env);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [HomeController::class, 'index']);
 Route::get('test', [TestController::class, 'hello']);
 
 Route::group(['prefix' => 'admin'], function() {
@@ -36,4 +34,6 @@ Route::group(['prefix' => 'admin'], function() {
 	Route::resource('tags', TagController::class);
 	Route::resource('users', UserController::class);
 	Route::resource('posts', PostController::class);
+	Route::resource('comments', PostController::class);
+	Route::resource('subscribers', PostController::class);
 });

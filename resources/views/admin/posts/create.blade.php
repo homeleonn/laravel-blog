@@ -58,7 +58,7 @@
 					<div class="input-group-addon">
 					  <i class="fa fa-calendar"></i>
 					</div>
-					<input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{ old('date') }}">
+					<input type="text" class="form-control pull-right" id="datepicker" name="date" value="{{ old('date') ? old('date') : date('d/m/y', time()) }}">
 				  </div>
 				  <!-- /.input group -->
 				</div>
@@ -66,9 +66,7 @@
 				<!-- checkbox -->
 				<div class="form-group">
 				  <label>
-					<input type="checkbox" class="minimal" name="is_feature" {{ old('is_feature') ? 'checked' : '' }}>
-				  </label>
-				  <label>
+					<input type="checkbox" id="featured" class="minimal" name="is_featured" {{ old('is_featured') ? 'checked' : '' }}>
 					Рекомендовать
 				  </label>
 				</div>
@@ -76,9 +74,7 @@
 				<!-- checkbox -->
 				<div class="form-group">
 				  <label>
-					<input type="checkbox" class="minimal" name="status" {{ old('status') ? 'checked' : '' }}>
-				  </label>
-				  <label>
+					<input id="status" type="checkbox" class="minimal" name="status" {{ old('status') ? 'checked' : '' }}>
 					Черновик
 				  </label>
 				</div>
