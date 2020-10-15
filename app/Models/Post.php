@@ -16,7 +16,7 @@ class Post extends Model
 	const IS_FEATURED = 1;
 	const IS_STANDARD = 0;
     
-    private $terms;
+    private $terms, $previous, $next;
     
     protected $fillable = ['title', 'content'];
     
@@ -170,5 +170,68 @@ class Post extends Model
 	public function getTagsTitles()
 	{
 		return $this->tags->count() ? $this->tags->implode('title', ', ') : 'Нет тегов';
+	}
+
+	public function getCategory()
+	{
+		return $this->category->title ?? '';
+	}
+
+	public function getTags()
+	{
+		return $this->tags() ?? [];
+	}
+
+	public function getLink()
+	{
+		return route('home.show', $this->slug);
+	}
+
+	public function getDate()
+	{
+		return $this->created_at->format('F j, Y');
+	}
+
+	public function hasPrevious()
+	{
+		return $this->previous = $this->getPrevious();
+	}
+
+	public function previous()
+	{
+		if ($this->previous) {
+			return $this->previous;
+		}
+
+		return $this->previous = $this->getPrevious();
+	}
+
+	public function getPrevious()
+	{
+		return Post::where('id', '<', $this->id)->orderBy('id', 'desc')->take(1)->first();
+	}
+
+	public function hasNext()
+	{
+		return $this->next = $this->getNext();
+	}
+
+	public function next()
+	{
+		if ($this->next) {
+			return $this->next;
+		}
+
+		return $this->next = $this->getNext();
+	}
+
+	public function getNext()
+	{
+		return Post::where('id', '>', $this->id)->orderBy('id', 'asc')->take(1)->first();
+	}
+
+	public function related()
+	{
+		return Post::where('id', '<>', $this->id)->take(5)->get();
 	}
 }

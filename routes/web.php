@@ -26,6 +26,7 @@ use App\Http\Controllers\TestController;
 // dd($app, $errors, $__env);
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/posts/{slug}', [HomeController::class, 'show'])->name('home.show');
 Route::get('test', [TestController::class, 'hello']);
 
 Route::group(['prefix' => 'admin'], function() {

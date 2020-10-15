@@ -27,6 +27,8 @@ class PostFactory extends Factory
             'slug' => $this->faker->slug,
             'content' => $this->faker->text,
             'description' => $this->faker->text(50),
+            'category_id' => 1,
+            'image' => 'photo1.png',
 //            'type' => mt_rand(0, 1) ? 'post' : 'fake_post',
             'created_at' => $this->faker->dateTime,
             'updated_at' => $this->faker->dateTime,
