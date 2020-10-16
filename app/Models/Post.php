@@ -172,11 +172,6 @@ class Post extends Model
 		return $this->tags->count() ? $this->tags->implode('title', ', ') : 'Нет тегов';
 	}
 
-	public function getCategory()
-	{
-		return $this->category->title ?? '';
-	}
-
 	public function getTags()
 	{
 		return $this->tags() ?? [];
@@ -185,6 +180,16 @@ class Post extends Model
 	public function getLink()
 	{
 		return route('home.show', $this->slug);
+	}
+
+	public function getCategoryLink()
+	{
+		if ($this->category) {
+			$link = route('category.list', $this->category->slug);
+			return "<h6><a href=\"{$link}\">{$this->category->title}</a></h6>";
+		}
+
+		return '<small>Нет категории</small>';
 	}
 
 	public function getDate()

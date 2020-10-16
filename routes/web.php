@@ -27,7 +27,8 @@ use App\Http\Controllers\TestController;
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/posts/{slug}', [HomeController::class, 'show'])->name('home.show');
-Route::get('test', [TestController::class, 'hello']);
+Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.list');
+Route::get('/tag/{slug}', [HomeController::class, 'tag'])->name('tag.list');
 
 Route::group(['prefix' => 'admin'], function() {
 	Route::get('/', [DashboardController::class, 'index']);
@@ -38,3 +39,7 @@ Route::group(['prefix' => 'admin'], function() {
 	Route::resource('comments', PostController::class);
 	Route::resource('subscribers', PostController::class);
 });
+
+
+
+Route::get('test', [TestController::class, 'hello']);
