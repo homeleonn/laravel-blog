@@ -80,7 +80,6 @@ class User extends Authenticatable
     private function hashPassword($passwordString)
     {
         if (!$passwordString) {
-            unset($this->password);
             return;
         }
         
