@@ -7,7 +7,7 @@
 
     <!-- favicon icon -->
 
-    <title>Blog</title>
+    <title>{{$title ?? $term->title ?? $post->title ?? 'Blog'}}</title>
 
     <!-- common css -->
     <link rel="stylesheet" href="/css/front.css">
@@ -40,7 +40,6 @@
                 <a class="navbar-brand" href="/"><img src="/images/logo.png" alt=""></a>
             </div>
 
-
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                 <ul class="nav navbar-nav text-uppercase">
@@ -55,6 +54,7 @@
                         <li><a href="{{route('login')}}">Login</a></li>
                     @else
                         <li><a href="{{route('profile')}}">My profile</a></li>
+                        <li><a href="{{route('profile.logout')}}">Logout</a></li>
                     @endif
                 </ul>
 
@@ -74,7 +74,9 @@
     <!-- /.container-fluid -->
 </nav>
     @if (session('status'))
-        {{session('status')}}
+    <div class="alert alert-info" style="text-align: center;" role="alert">
+      {{session('status')}}
+    </div>
     @endif
 
     @include('admin.layouts.errors')

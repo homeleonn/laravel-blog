@@ -30,7 +30,7 @@
                                     {!!$post->description!!}
 
                                     <div class="social-share">
-                                        <span class="social-share-title pull-left text-capitalize">By Rubel On {{$post->getDate()}}</span>
+                                        <span class="social-share-title pull-left text-capitalize">By {{$post->getAuthorName()}} On {{$post->getDate()}}</span>
                                     </div>
                                 </div>
                             </div>

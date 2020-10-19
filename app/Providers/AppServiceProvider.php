@@ -5,6 +5,7 @@ namespace App\Providers;
 use View;
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-		View::composer(['admin.posts.create', 'admin.posts.edit'], function($view) {
+		View::composer(['admin.layouts.layout', 'admin.posts.edit'], function($view) {
+            $view->with(['disallowedCommentsCount' => Comment::where('status', 0)->count()]);
+        });
+
+        View::composer(['admin.posts.create', 'admin.posts.edit'], function($view) {
             $view->with(['categories' => Category::get(), 'tags' => Tag::get()]);
         });
 

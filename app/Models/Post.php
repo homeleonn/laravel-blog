@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use App\Traits\TImagable;
 use App\Traits\TSluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,53 +19,18 @@ class Post extends Model
     
     private $terms, $previous, $next;
     
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'description'];
     
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
-//    public function getCategoryAttribute($value)
-//    {
-//        return $this->terms('category')->first();
-//    }
-//
-////    public function getTagsAttribute($value)
-////    {
-////		return $this->terms('tag');
-////    }
-//
-//    private function terms($type)
-//    {
-//        if (!$this->terms) {
-//            $this->terms = $this->belongsToMany(Term::class, 'post_terms', 'post_id', 'term_id')->get()->groupBy('type');
-//        }
-//
-//        return $this->terms[$type] ?? null;
-//    }
-//
-//    public function tags()
-//    {
-//		return $this->belongsToMany(Term::class, 'post_terms', 'post_id', 'term_id')->where('type', 'tag');
-//    }
-//
-//	public function sync($type, $ids) {
-//		DB::table('post_terms')
-//			->where('post_id', $this->id)
-//			->whereIn(
-//				'term_id',
-//				DB::table('terms')
-//					->where('type', $type)
-//					->get('id')
-//					->groupBy('id')
-//					->keys()
-//					->toArray())
-//			->delete();
-//
-//		$this->tags()->attach($ids);
-//	}
-	
+
+    public function getAuthorName()
+    {
+    	return $this->author->name ?? 'Нет автора';
+    }
+
 	public function category()
 	{
 		return $this->belongsTo(Category::class);
@@ -74,11 +40,17 @@ class Post extends Model
 	{
 		return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
 	}
+
+	public function comments()
+	{
+		return $this->hasMany(Comment::class);
+	}
 	
     public static function add($fields)
     {
         $post = new static();
         $post->fill($fields);
+        $post->user_id = Auth::user()->id;
         $post->save();
         
         return $post;
@@ -113,7 +85,11 @@ class Post extends Model
 		$this->updated_at = $date;
 	}
     
-	
+	public function setAuthor()
+	{
+		$this->user_id = Auth::user()->id;
+	}
+
 	public function setCategory($id)
 	{
 		if ($id == null || $id < 1) {

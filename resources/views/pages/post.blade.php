@@ -27,7 +27,7 @@
 
                         <div class="social-share">
 							<span
-                                    class="social-share-title pull-left text-capitalize">On {{$post->getDate()}}</span>
+                                    class="social-share-title pull-left text-capitalize">By {{$post->getAuthorName()}} On {{$post->getDate()}}</span>
                             <ul class="text-center pull-right">
                                 <li><a class="s-facebook" href="#"><i class="fa fa-facebook"></i></a></li>
                                 <li><a class="s-twitter" href="#"><i class="fa fa-twitter"></i></a></li>
@@ -38,13 +38,16 @@
                         </div>
                     </div>
                 </article>
-                <div class="top-comment"><!--top comment-->
-                    <img src="/images/comment.jpg" class="pull-left img-circle" alt="">
-                    <h4>Rubel Miah</h4>
 
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy hello ro mod tempor
-                        invidunt ut labore et dolore magna aliquyam erat.</p>
-                </div><!--top comment end-->
+                @if ($post->author)
+                <div class="top-comment">
+                    <img src="{{$post->author->getImage()}}" style="width: 150px;" class="pull-left img-circle" alt="">
+                    <h4>{{$post->getAuthorName()}}</h4>
+
+                    <p>{{$post->author->description}}</p>
+                </div>
+                @endif
+                
                 <div class="row"><!--blog next previous-->
 
                     <div class="col-md-6">
@@ -73,7 +76,7 @@
 	                                <div class="overlay">
 
 	                                    <div class="promo-text">
-	                                        <p><i class=" pull-left fa fa-angle-left"></i></p>
+	                                        <p><i class=" pull-right fa fa-angle-right"></i></p>
 	                                        <h5>{{$post->next()->title}}</h5>
 	                                    </div>
 	                                </div>
@@ -98,61 +101,45 @@
 	                    @endforeach
                     </div>
                 </div><!--related post carousel-->
-                <div class="bottom-comment"><!--bottom comment-->
-                    <h4>3 comments</h4>
 
-                    <div class="comment-img">
-                        <img class="img-circle" src="/images/comment-img.jpg" alt="">
+                <h4>{{$post->comments->count()}} comment(s)</h4>
+                 @foreach ($post->comments as $comment)
+                    <div class="bottom-comment" style=" margin: 10px 0 10px;"><!--bottom comment-->
+                        
+                            <div class="comment-img" style="padding-bottom: 10px;">
+                                <img class="img-circle" style="width: 100px;" src="{{$comment->author->getImage()}}" alt="">
+                            </div>
+
+                            <div class="comment-text">
+                                <h5>{{$comment->author->name}}</h5>
+
+                                <p class="comment-date">
+                                    {{$comment->getDate()}}
+                                </p>
+
+
+                                <p class="para">{{$comment->text}}</p>
+                            </div>
                     </div>
-
-                    <div class="comment-text">
-                        <a href="#" class="replay btn pull-right"> Replay</a>
-                        <h5>Rubel Miah</h5>
-
-                        <p class="comment-date">
-                            December, 02, 2015 at 5:57 PM
-                        </p>
-
-
-                        <p class="para">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                            diam nonumy
-                            eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                            voluptua. At vero eos et cusam et justo duo dolores et ea rebum.</p>
-                    </div>
-                </div>
+                @endforeach
                 <!-- end bottom comment-->
 
-
+                @auth
                 <div class="leave-comment"><!--leave comment-->
                     <h4>Leave a reply</h4>
 
-
-                    <form class="form-horizontal contact-form" role="form" method="post" action="#">
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" id="email" name="email"
-                                       placeholder="Email">
-                            </div>
-                        </div>
-
+                    <form class="form-horizontal contact-form" role="form" method="post" action="/comment/{{$post->id}}">
+                        @csrf
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="text" class="form-control" id="subject" name="subject"
-                                       placeholder="Website url">
+										<textarea class="form-control" rows="6" name="text"
+                                                  placeholder="Writeright Massage"></textarea>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-										<textarea class="form-control" rows="6" name="message"
-                                                  placeholder="Write Massage"></textarea>
-                            </div>
-                        </div>
-                        <a href="#" class="btn send-btn">Post Comment</a>
+                        <button class="btn send-btn">Send</button>
                     </form>
                 </div><!--end leave comment-->
+                @endauth
             </div>
             @include('pages._sidebar')
         </div>

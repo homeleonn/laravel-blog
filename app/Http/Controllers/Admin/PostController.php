@@ -21,7 +21,9 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-		$this->setPostData($request, new Post)->save();
+    	$post = new Post;
+		$post->setAuthor();
+		$this->setPostData($request, $post);
 		
 		return redirect()->route('posts.index');
     }
@@ -33,7 +35,10 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-		$this->setPostData($request, Post::findOrFail($id))->save();
+    	//dd($request->all());
+    	$post = Post::findOrFail($id);
+		$this->setPostData($request, $post);
+		$post->save();
 		
 		return redirect()->route('posts.index');
     }
@@ -51,12 +56,11 @@ class PostController extends Controller
 		$post->fill($request->all());
 		$post->setDate($request->get('date'));
 		$post->setCategory($request->get('category_id'));
-		$post->save();
 		$post->setTags($request->get('tags'));
 		$post->uploadImage($request->file('image'));
 		$post->toggleFeatured($request->get('is_featured'));
 		$post->toggleStatus($request->get('status'));
-		// dd($request->get('is_featured'), $request->get('status'), $post);
+		
 		return $post;
 	}
 	

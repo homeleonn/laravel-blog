@@ -11,12 +11,28 @@ class HomeController extends Controller
 {
     public function index()
     {
-    	return view('pages.index', ['posts' => Post::orderBy('id', 'DESC')->with('category')->paginate(2)]);
+        $posts = Post::where('status', 0)
+                    ->orderBy('id', 'DESC')
+                    ->with('category', 'author')
+                    ->paginate(2);
+    	return view('pages.index', [
+            'posts' => $posts,
+            'title' => 'My Blog',
+        ]);
     }
 
     public function show($slug)
     {
-    	$post = Post::where('slug', $slug)->with('category', 'tags')->firstOrFail();
+    	$post = Post::where('slug', $slug)->with([
+            'category', 
+            'tags', 
+            'author', 
+            'comments' => function($query){
+                return $query->where('status', 1);
+            }, 
+            'comments.author'
+        ])->firstOrFail();
+
     	return view('pages.post', ['post' => $post]);
     }
 

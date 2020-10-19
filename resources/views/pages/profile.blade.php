@@ -12,7 +12,8 @@
                     <h3 class="text-uppercase">My profile</h3>
                     <br>
                     <img src="{{$user->getImage()}}" alt="" class="profile-image">
-                    <form class="form-horizontal contact-form" role="form" method="post" action="">
+                    <form class="form-horizontal contact-form" role="form" method="post" action="{{route('profile.update')}}" enctype="multipart/form-data">
+                    	@csrf @method('put')
                         <div class="form-group">
                             <div class="col-md-12">
                                 <input type="text" class="form-control" id="name" name="name"
@@ -37,7 +38,14 @@
 								<input type="file" class="form-control" id="image" name="image">	
                             </div>
                         </div>
-                        <button type="submit" name="submit" class="btn send-btn">Update</button>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+								<textarea name="description" id="description" class="col-md-12" rows="10">{{$user->description}}</textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn send-btn">Update</button>
 
                     </form>
                 </div><!--end leave comment-->
