@@ -17,7 +17,6 @@
     <script src="/js/html5shiv.js"></script>
     <script src="/js/respond.js"></script>
     <![endif]-->
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon.png">
 

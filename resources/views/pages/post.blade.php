@@ -1,4 +1,5 @@
 @extends('layout')
+<?php /** @var \App\Models\Post $post */ ?>
 
 @section('content')
 	<!--main content start-->
@@ -47,7 +48,7 @@
                     <p>{{$post->author->description}}</p>
                 </div>
                 @endif
-                
+
                 <div class="row"><!--blog next previous-->
 
                     <div class="col-md-6">
@@ -105,7 +106,7 @@
                 <h4>{{$post->comments->count()}} comment(s)</h4>
                  @foreach ($post->comments as $comment)
                     <div class="bottom-comment" style=" margin: 10px 0 10px;"><!--bottom comment-->
-                        
+
                             <div class="comment-img" style="padding-bottom: 10px;">
                                 <img class="img-circle" style="width: 100px;" src="{{$comment->author->getImage()}}" alt="">
                             </div>
@@ -132,8 +133,7 @@
                         @csrf
                         <div class="form-group">
                             <div class="col-md-12">
-										<textarea class="form-control" rows="6" name="text"
-                                                  placeholder="Writeright Massage"></textarea>
+								<textarea class="form-control" rows="6" name="text" placeholder="Writeright Massage"></textarea>
                             </div>
                         </div>
                         <button class="btn send-btn">Send</button>

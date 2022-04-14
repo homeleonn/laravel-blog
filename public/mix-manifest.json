@@ -1,4 +1,5 @@
 {
-    "/css/front.css": "/css/front.css",
-    "/js/front.js": "/js/front.js"
+    "/assets/style.css": "/assets/style.css",
+    "/assets/dev.css": "/assets/dev.css",
+    "/assets/dev.js": "/assets/dev.js"
 }

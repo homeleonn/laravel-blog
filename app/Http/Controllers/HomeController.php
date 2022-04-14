@@ -6,15 +6,19 @@ use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        // session(['admin', '1']);
+       // var_dump(session()->all());
         $posts = Post::where('status', 0)
                     ->orderBy('id', 'DESC')
                     ->with('category', 'author')
                     ->paginate(2);
+
     	return view('pages.index', [
             'posts' => $posts,
             'title' => 'My Blog',
@@ -23,15 +27,16 @@ class HomeController extends Controller
 
     public function show($slug)
     {
-    	$post = Post::where('slug', $slug)->with([
-            'category', 
-            'tags', 
-            'author', 
-            'comments' => function($query){
-                return $query->where('status', 1);
-            }, 
-            'comments.author'
-        ])->firstOrFail();
+    	$post = Post::where('slug', $slug)
+                ->with([
+                    'category',
+                    'tags',
+                    'author',
+                    'comments' => function($query){
+                        return $query->where('status', 1);
+                    },
+                    'comments.author'
+                ])->firstOrFail();
 
     	return view('pages.post', ['post' => $post]);
     }
@@ -53,7 +58,7 @@ class HomeController extends Controller
     {
     	$tag = Tag::whereSlug($slug)->firstOrFail();
     	$posts = $tag->posts()->with('category')->paginate(2);
-    	
+
     	return view('pages.list', ['term' => $tag, 'posts' => $posts, 'type' => 'tag']);
     }
 }

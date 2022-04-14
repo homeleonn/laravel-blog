@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Term extends Model
 {
     use HasFactory;
-    
+
     public function posts()
     {
-        return $this->hasMany(Post::class, 'post_terms', 'term_id', 'post_id');
+        return $this->hasMany(Post::class, 'post_terms', 'term_id');
     }
 }

@@ -67,14 +67,14 @@ trait TSluggable
 			$i = 0;
 			
 			do{
-				if(preg_match('/' . $URL_PATTERN . '/', $from{$i})){
-					if(mb_detect_encoding($from{$i}))
-						$newUrl .= $from{$i};
+				if(preg_match('/' . $URL_PATTERN . '/', $from[$i])){
+					if(mb_detect_encoding($from[$i]))
+						$newUrl .= $from[$i];
 				}else{
 					$newUrl .= '-';
 				}
 				$i++;
-			}while(isset($from{$i}));
+			}while(isset($from[$i]));
 			
 			if(!$newUrl || !preg_match('/^' . $URL_PATTERN . '$/', mb_convert_encoding($newUrl, 'UTF-8'))) $newUrl = '1';
 		}
